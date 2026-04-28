@@ -108,7 +108,6 @@ struct statPromptPhoton {
 
     const AxisSpec MCptAxis = {cfgMCptNbins, cfgMCptbinLow, cfgMCptbinHigh};
 
-
     triggerMaskBits = jetderiveddatautilities::initialiseTriggerMaskBits(cfgTriggerMasks);
     if (cfgJETracks) {
       trackFilter = jetderiveddatautilities::initialiseTrackSelection(static_cast<std::string>(cfgTrackFilter));
@@ -1521,16 +1520,15 @@ struct statPromptPhoton {
           continue;
         if (std::fabs(mcParticle.getGenStatusCode()) >= 81 || !mcParticle.isPhysicalPrimary())
           continue;
-	if(cfgReqRecPS_GEN){
-	  if(std::fabs(mcParticle.eta())>0.62)
-	    continue;
-	  bool insideCalPhi = false;
-	  if((mcParticle.phi()> 1.42 && mcParticle.phi()<3.26) || (mcParticle.phi()> 4.56 && mcParticle.phi()<5.70))
-	    insideCalPhi=true;
-	  if(!insideCalPhi)
-	    continue;
-	}
-       
+        if (cfgReqRecPS_GEN) {
+          if (std::fabs(mcParticle.eta()) > 0.62)
+            continue;
+          bool insideCalPhi = false;
+          if ((mcParticle.phi() > 1.42 && mcParticle.phi() < 3.26) || (mcParticle.phi() > 4.56 && mcParticle.phi() < 5.70))
+            insideCalPhi = true;
+          if (!insideCalPhi)
+            continue;
+        }
 
         // Chase this final-state photon upward
         int chaseindex = -1;
@@ -1646,17 +1644,17 @@ struct statPromptPhoton {
         if (clusterparticle.getGenStatusCode() < 0)
           continue;
         if (std::fabs(clusterparticle.getGenStatusCode()) >= 81)
-          continue;	
-	if(cfgReqRecPS_REC){
-	  if(std::fabs(clusterparticle.eta())>0.62)
-	    continue;
-	  bool insideCalPhi = false;
-	  if((clusterparticle.phi()> 1.42 && clusterparticle.phi()<3.26) || (clusterparticle.phi()> 4.56 && clusterparticle.phi()<5.70))
-	    insideCalPhi=true;
-	  if(!insideCalPhi)
-	    continue;
-	}
-	
+          continue;
+        if (cfgReqRecPS_REC) {
+          if (std::fabs(clusterparticle.eta()) > 0.62)
+            continue;
+          bool insideCalPhi = false;
+          if ((clusterparticle.phi() > 1.42 && clusterparticle.phi() < 3.26) || (clusterparticle.phi() > 4.56 && clusterparticle.phi() < 5.70))
+            insideCalPhi = true;
+          if (!insideCalPhi)
+            continue;
+        }
+
         int chaseindex = -1;
         for (auto& mom : clusterparticle.mothers_as<aod::JMcParticles>()) {
           chaseindex = mom.globalIndex();
